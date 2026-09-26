@@ -14,7 +14,297 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      notices: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          published: boolean
+          title: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          title?: string
+        }
+        Relationships: []
+      }
+      students: {
+        Row: {
+          contact_number: string
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          status: string
+          stream: string | null
+          student_code: string | null
+        }
+        Insert: {
+          contact_number: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          status?: string
+          stream?: string | null
+          student_code?: string | null
+        }
+        Update: {
+          contact_number?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          status?: string
+          stream?: string | null
+          student_code?: string | null
+        }
+        Relationships: []
+      }
+      tenms_catalog_cache: {
+        Row: {
+          fetched_at: string
+          payload: Json
+          product_id: number
+          slug: string | null
+          title: string | null
+        }
+        Insert: {
+          fetched_at?: string
+          payload: Json
+          product_id: number
+          slug?: string | null
+          title?: string | null
+        }
+        Update: {
+          fetched_at?: string
+          payload?: Json
+          product_id?: number
+          slug?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
+      tenms_classes: {
+        Row: {
+          class_no: number
+          course_id: number
+          created_at: string
+          id: string
+          note: string | null
+          resource_url: string | null
+          scheduled_on: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          class_no?: number
+          course_id: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          resource_url?: string | null
+          scheduled_on?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          class_no?: number
+          course_id?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          resource_url?: string | null
+          scheduled_on?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenms_classes_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "tenms_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenms_courses: {
+        Row: {
+          created_at: string
+          id: number
+          name_bn: string
+          name_en: string
+          program_id: number
+          thumbnail: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: number
+          name_bn: string
+          name_en: string
+          program_id: number
+          thumbnail?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name_bn?: string
+          name_en?: string
+          program_id?: number
+          thumbnail?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenms_courses_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "tenms_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenms_programs: {
+        Row: {
+          catalog_product_id: number
+          created_at: string
+          id: number
+          slug: string | null
+          stream: string
+          subject_name_bn: string
+          subject_name_en: string
+        }
+        Insert: {
+          catalog_product_id: number
+          created_at?: string
+          id: number
+          slug?: string | null
+          stream?: string
+          subject_name_bn: string
+          subject_name_en: string
+        }
+        Update: {
+          catalog_product_id?: number
+          created_at?: string
+          id?: number
+          slug?: string | null
+          stream?: string
+          subject_name_bn?: string
+          subject_name_en?: string
+        }
+        Relationships: []
+      }
+      ticket_messages: {
+        Row: {
+          author_name: string | null
+          author_type: string
+          body: string
+          created_at: string
+          id: string
+          ticket_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          author_type: string
+          body: string
+          created_at?: string
+          id?: string
+          ticket_id: string
+        }
+        Update: {
+          author_name?: string | null
+          author_type?: string
+          body?: string
+          created_at?: string
+          id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tickets: {
+        Row: {
+          attachment_url: string | null
+          category: string
+          class_ref: string | null
+          course_id: number | null
+          created_at: string
+          description: string
+          id: string
+          is_public: boolean
+          status: string
+          student_id: string
+          ticket_no: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          category: string
+          class_ref?: string | null
+          course_id?: number | null
+          created_at?: string
+          description: string
+          id?: string
+          is_public?: boolean
+          status?: string
+          student_id: string
+          ticket_no?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachment_url?: string | null
+          category?: string
+          class_ref?: string | null
+          course_id?: number | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_public?: boolean
+          status?: string
+          student_id?: string
+          ticket_no?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "tenms_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
