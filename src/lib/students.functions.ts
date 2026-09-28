@@ -48,7 +48,13 @@ export const importStudents = createServerFn({ method: "POST" })
       };
     }
 
-    const rows: Record<string, string | null>[] = [];
+    const rows: {
+      name: string;
+      contact_number: string;
+      student_code: string | null;
+      email: string | null;
+      stream: string | null;
+    }[] = [];
     const invalid: string[] = [];
 
     lines.slice(1).forEach((line, rowIndex) => {

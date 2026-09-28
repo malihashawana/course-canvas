@@ -155,7 +155,7 @@ export const syncTenmsCatalog = createServerFn({ method: "POST" }).handler(async
         product_id: program.catalog_product_id,
         slug: program.slug,
         title: snapshot.title,
-        payload: snapshot as unknown as Record<string, unknown>,
+        payload: JSON.parse(JSON.stringify(snapshot)),
         fetched_at: new Date().toISOString(),
       });
       synced += 1;
