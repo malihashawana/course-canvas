@@ -159,7 +159,7 @@ function ActivityPage() {
                 </div>
               ) : (
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Course info not synced yet — the support team can sync it from the support desk.
+                  Loading course info from 10 Minute School…
                 </p>
               )}
 
