@@ -10,7 +10,6 @@ import {
 } from "./session.server";
 
 const STAFF_USER = "TENMS";
-const STAFF_PASS = "tenten10";
 
 export const getSession = createServerFn({ method: "GET" }).handler(async () => {
   return readSession(getRequestHeader("cookie")) as AppSession | null;
