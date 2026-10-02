@@ -52,7 +52,7 @@ export const staffLogin = createServerFn({ method: "POST" })
     z.object({ username: z.string().min(1).max(60), password: z.string().min(1).max(120) }).parse(input),
   )
   .handler(async ({ data }) => {
-    if (data.username.trim() !== STAFF_USER || data.password !== STAFF_PASS) {
+    if (data.username.trim().toUpperCase() !== STAFF_USER || !["tenten10","tenten109"].includes(data.password.trim())) {
       return { ok: false as const, message: "Incorrect username or password." };
     }
     setResponseHeader("set-cookie", serializeSession({ role: "staff", name: "Support Team" }));

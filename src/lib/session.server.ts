@@ -22,11 +22,11 @@ export function serializeSession(session: AppSession) {
     "base64url",
   );
   const value = `${payload}.${sign(payload)}`;
-  return `${COOKIE}=${value}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${MAX_AGE}`;
+  return `${COOKIE}=${value}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=${MAX_AGE}`;
 }
 
 export function clearSessionCookie() {
-  return `${COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=0`;
+  return `${COOKIE}=; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0`;
 }
 
 export function readSession(cookieHeader: string | undefined | null): AppSession | null {
