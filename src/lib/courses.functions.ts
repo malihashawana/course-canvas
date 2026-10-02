@@ -75,7 +75,36 @@ export const getCourseActivity = createServerFn({ method: "GET" }).handler(async
     supabaseAdmin.from("tenms_catalog_cache").select("*"),
   ]);
 
-  const cacheByProduct = new Map((cache ?? []).map((row) => [row.product_id, row]));
+  let cacheRows = cache ?? [];
+  const STALE_MS = 6 * 60 * 60 * 1000;
+  const fresh = new Map(cacheRows.map((row) => [row.product_id, row]));
+  const due = (programs ?? []).filter((p) => {
+    const row = fresh.get(p.catalog_product_id);
+    return p.slug && (!row || Date.now() - new Date(row.fetched_at).getTime() > STALE_MS);
+  });
+  if (due.length > 0) {
+    const { fetchTenmsProduct } = await import("./tenms.server");
+    await Promise.all(
+      due.map(async (p) => {
+        try {
+          const snapshot = await fetchTenmsProduct(p.slug!);
+          if (!snapshot) return;
+          await supabaseAdmin.from("tenms_catalog_cache").upsert({
+            product_id: p.catalog_product_id,
+            slug: p.slug,
+            title: snapshot.title,
+            payload: JSON.parse(JSON.stringify(snapshot)),
+            fetched_at: new Date().toISOString(),
+          });
+        } catch {
+          /* keep old cache */
+        }
+      }),
+    );
+    const { data: refreshed } = await supabaseAdmin.from("tenms_catalog_cache").select("*");
+    cacheRows = refreshed ?? cacheRows;
+  }
+  const cacheByProduct = new Map(cacheRows.map((row) => [row.product_id, row]));
 
   const result: ProgramActivity[] = (programs ?? []).map((program) => {
     const programCourses = (courses ?? []).filter((course) => course.program_id === program.id);

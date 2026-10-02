@@ -33,7 +33,12 @@ function pickThumbnail(media: unknown): string | null {
 
 /** Reads one HSC 28 course from 10 Minute School's public course feed. */
 export async function fetchTenmsProduct(slug: string): Promise<TenmsSnapshot | null> {
-  const response = await fetch(`${BASE}/${slug}?lang=en`, { headers: HEADERS });
+  const response = await fetch(`${BASE}/${slug}?lang=en`, {
+    headers: {
+      ...HEADERS,
+      ...(process.env["TENMS_BEARER_TOKEN"] ? { Authorization: `Bearer ${process.env["TENMS_BEARER_TOKEN"]}` } : {}),
+    },
+  });
   if (!response.ok) return null;
 
   const json = (await response.json()) as { data?: Record<string, unknown> };
